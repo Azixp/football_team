@@ -1,0 +1,26 @@
+version: '3.1'
+
+services:
+  php-apache:
+    build: ./config/apache-php
+    image: php:7.3-apache-mysql
+    ports:
+      - '80:80'
+    volumes:
+      - ./src:/var/www/html
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./config/database:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: football
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
